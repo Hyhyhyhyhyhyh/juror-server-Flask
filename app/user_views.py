@@ -89,7 +89,7 @@ class CreateUser(Resource):
 
         try:
             # 插入账号信息
-            sql = "insert into users(userid,password,username,auth_type,jurorid,account_status,dept_id) values('{0}','{1}','{2}',{3},{4},{5},'OPEN')".format(userid,password,username,auth_type,jurorid,dept_id)
+            sql = "insert into users(userid,password,username,auth_type,jurorid,dept_id,account_status) values('{0}','{1}','{2}',{3},{4},{5},'OPEN')".format(userid,password,username,auth_type,jurorid,dept_id)
             curs.execute(sql)
             conn.commit()
             curs.close()
