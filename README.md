@@ -28,7 +28,7 @@
 ```
 功能            请求      URL路由
 -----------  ---------  ------------------------------
-测试接口      GET, POST  /api/test
+测试接口      GET, POST  /api/test/<string:token>
  
 创建用户      POST       /api/user/create
 删除用户      DELETE     /api/user/drop
