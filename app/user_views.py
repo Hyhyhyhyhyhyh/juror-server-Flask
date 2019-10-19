@@ -128,7 +128,7 @@ class Login(Resource):
     def post(self):
         data = self.parser.parse_args()
         userid_post    = data.get('id')
-        password_post  = data.get('pwd')
+        password_post  = data.get('pw')
         
         conn = db.mysql_connect()
         curs = conn.cursor()
@@ -275,7 +275,22 @@ class UserList(Resource):
         1002 token为空
         1003 token验证不通过
     """
-    def get(self, token, page, limit, id, authType, name):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('page', type=str, default=None)
+        self.parser.add_argument('limit', type=str, default=None)
+        self.parser.add_argument('id', type=str, default=None)
+        self.parser.add_argument('authType', type=str, default=None)
+        self.parser.add_argument('name', type=str, default=None)
+        
+    def get(self, token):
+        data = self.parser.parse_args()
+        get_page      = data.get('page')
+        get_limit     = data.get('limit')
+        get_userid    = data.get('id')
+        get_auth_type = data.get('authType')
+        get_username  = data.get('name')
+        
         if token is None:       #根据token判断新账号的权限
             return {"code":1002, "msg":"token为空"}
         else:
@@ -285,13 +300,6 @@ class UserList(Resource):
                 return {"code":1003, "msg":"非法token"}
 
 
-        #前端查询条件传递的参数
-        get_page      = page
-        get_limit     = limit
-        get_userid    = id
-        get_auth_type = authType
-        get_username  = name
-        
         ####### 根据前端搜索条件查询 #######
         sql = """select u.userid,u.username,u.auth_type,u.jurorid,u.created,u.last_login,u.last_modified,u.account_status,
         d.name,d.level,d.city,d.region
@@ -305,7 +313,7 @@ class UserList(Resource):
             若get请求传入的auth_type>0 -> 只查询这个权限的用户
             若get请求传入的auth_type=0 -> 根据token里面的auth_type判断查询权限
             """
-            if int(authType) > 0:
+            if int(get_auth_type) > 0:
                 auth_type = int(MySQLdb.escape_string(get_auth_type).decode('utf-8'))
                 auth_type = " and auth_type={0} and dept_id={1}".format(auth_type,int(token_dept_id))
             elif int(get_auth_type) == 0:
@@ -451,17 +459,3 @@ class DropUser(Resource):
             conn.close()
             return {"code":1001, "msg":str(e)}
 
-
-# 测试接口
-class Test(Resource):
-    def __init__(self):
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument('id', type=str, default=None)
-        
-    def get(self, id):
-        return id
-    
-    def post(self):
-        data = self.parser.parse_args()
-        id   = data.get('id')
-        return id

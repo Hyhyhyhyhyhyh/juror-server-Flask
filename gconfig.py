@@ -1,0 +1,13 @@
+from gevent import monkey
+monkey.patch_all()
+
+import multiprocessing
+
+debug = True
+loglevel = 'debug'
+bind = '172.18.0.1:9100'         # 提供web服务的端口，如果要跟容器通信，ip不能设置为localhost或127.0.0.1
+pidfile = 'logs/gunicorn.pid'
+logfile = 'logs/gunicorn_debug.log'
+
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = 'gevent'             # 默认为阻塞模式，最好选择gevent模式
