@@ -9,7 +9,7 @@ bind = '172.18.0.1:9100'         # 提供web服务的端口，如果要跟容器
 pidfile = 'logs/gunicorn.pid'
 
 access_log_format = '%(t)s %(p)s %(h)s "%(r)s" %(s)s %(L)s %(b)s %(f)s" "%(a)s"' 
-errorlog          = "/data/data-quality/logs/gunicorn_error.log"        # 错误日志文件
+errorlog          = "/data/pyweb/juror-server/logs/gunicorn_error.log"        # 错误日志文件
 capture_output    = True
 accesslog         = '-'
 
