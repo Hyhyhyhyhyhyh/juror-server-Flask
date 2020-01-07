@@ -10,6 +10,8 @@ class Test(Resource):
     def get(self, token):
         data = self.parser.parse_args()
         id   = data.get('id')
+        print('token', token)
+        print('id', id)
         return token+"|"+id
     
     def post(self):
